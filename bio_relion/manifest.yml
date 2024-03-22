@@ -1,0 +1,8 @@
+---
+name: RELION
+category: Bioinformatics Apps
+subcategory: Apps
+role: batch_connect
+description: |
+  This app will launch RELION. 
+  More information about RELION can be found here (https://github.com/3dem/relion).

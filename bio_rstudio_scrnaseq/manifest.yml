@@ -1,0 +1,9 @@
+---
+name: RStudio for scRNA-Seq
+category: Bioinformatics Apps
+subcategory: Apps
+role: batch_connect
+description: |
+  This app will launch a RStudio server  with commonly used R packages for scRNA-seq analysis such as Seurat and monocle
+  on the [Tufts High Performance Compute (HPC) cluster](https://it.tufts.edu/researchtechnology.tufts.edu). Resources 
+  are sized for most purposes. Email email tts-research@tufts.edu if larger capacity is needed.

@@ -1,0 +1,25 @@
+---
+batch_connect:
+  template: "basic"
+  set_host: "host=$(hostname -A | awk '{print $1}')"
+  conn_params:
+    - csrf_token
+
+script:
+  email_on_started: true
+  email_on_terminated: true
+  email: <%= ENV["USER"] %>@tufts.edu
+  job_name: "OnDemand/shinyngs"
+  native:
+    - "--time"
+    - "<%= bc_num_hours %>:0:0"
+    - "-n"
+    - "<%= num_cores %>"
+    - "--mem"
+    - "<%= num_memory %>"
+    - "--nodes"
+    - "1"
+    <%- if reservation != 'default' -%>
+    - "--reservation"
+    - "<%= reservation %>"
+    <%- end -%>

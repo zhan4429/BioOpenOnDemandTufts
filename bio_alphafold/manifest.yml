@@ -1,0 +1,8 @@
+---
+name: AlphaFold
+category: Bioinformatics Apps
+subcategory: Apps
+role: batch_connect
+description: |
+  This app will launch AlphaFold. 
+  More information about AlphaFold can be found here (https://github.com/deepmind/alphafold).

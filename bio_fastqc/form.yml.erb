@@ -1,0 +1,22 @@
+---
+cluster: "tuftshpc"
+form:
+  - bc_num_hours
+  - num_cores
+  - num_memory
+  - reservation
+  - bc_vnc_resolution
+  - version
+
+attributes:
+  bc_vnc_resolution:
+    required: true
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/large/num_cores.yml").indent(2) %>
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/large/num_memory.yml").indent(2) %>
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/reservation.yml").indent(2) %>
+
+  version:
+    label: Software Version
+    widget: select
+    options:
+      - ["0.12.1"]

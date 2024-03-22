@@ -1,0 +1,33 @@
+---
+cluster: "tuftshpc"
+form:
+  - bc_num_hours
+  - num_cores
+  - num_memory
+  - reservation
+  - version
+
+attributes:
+  bc_vnc_resolution:
+    required: true
+
+  num_cores:
+    widget: "select"
+    label: "Number of CPU Cores"
+    options:
+      - ["1", "1"]
+      - ["2", "2"]
+      - ["4", "4"]
+      - ["6", "6"]
+    id: 'num_cores'
+
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/medium/num_memory.yml").indent(2) %>
+
+
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/reservation.yml").indent(2) %>
+
+  version:
+    label: Software Version
+    widget: select
+    options:
+      - ["1.8.5"]

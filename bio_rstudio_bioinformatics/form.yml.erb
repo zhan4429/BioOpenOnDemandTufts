@@ -1,0 +1,58 @@
+---
+cluster: "tuftshpc"
+form:
+  - bc_num_hours
+  - cpu_partition
+  - num_cores
+  - num_memory
+  - reservation
+  - version
+
+attributes:
+  bc_vnc_resolution:
+    required: true
+
+  cpu_partition:
+    widget: "select"
+    label: "Select cpu partition"
+    help: "NOTE: Selecting partition is optional. Please do not choose specific lab partitions if you are not a member of that lab."
+    value: "batch"
+    options:
+      - ["batch","batch"]
+      - ["largemem", "largemem"]
+      - ["preempt", "preempt"]
+      - ["patralab", "patralab"]
+
+  num_cores:
+    widget: "select"
+    label: "Number of cores"
+    options:
+      - ["3", "3"]
+      - ["4", "4"]
+      - ["6", "6"]
+      - ["8", "8"]
+      - ["10", "10"]
+      - ["12", "12"]
+      - ["16", "16"]
+      - ["24", "24"]
+    id: 'num_cores'
+
+  num_memory:
+    widget: "select"
+    label: "Amount of memory"
+    help: "Enter memory amount in GB, i.e. `500` for 500GB or `1000` for 1TB"
+    required: true
+    widget: "number_field"
+    pattern: "[0-9]{1,2,3}"
+    id: 'num_memory'
+    value: 4
+    min: 1
+    max: 1400
+
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/reservation.yml").indent(2) %>
+
+  version:
+    label: Software Version
+    widget: select
+    options:
+      - ["4.3.2"]

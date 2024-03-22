@@ -1,0 +1,9 @@
+---
+name: Shinyngs
+category: Bioinformatics Apps
+subcategory: Apps
+role: batch_connect
+description: |
+  [Shinyngs](https://github.com/pinin4fjords/shinyngs) is an R package designed to facilitate downstream analysis of RNA-seq and similar expression data with various exploratory plots and data mining tools.
+
+

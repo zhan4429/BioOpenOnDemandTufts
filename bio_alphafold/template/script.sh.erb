@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+# Clean the environment
+module purge
+
+# Go to workding directory
+work_dir=<%= context.work_dir %>
+
+if [ ! -d "$work_dir" ]
+then
+	echo "$work_dir does not exist."
+	mkdir -p $work_dir
+fi
+cd $work_dir
+
+
+# Pipeline parameters
+database=<%= context.database %>
+database_path="/cluster/tufts/biocontainers/datasets/alphafold"
+input_fasta_paths=<%= context.fasta_paths %>
+output_dir=<%= context.output_dir %>
+use_precomputed_msas=<%= context.use_precomputed_msas %>
+models_to_relax="<%= context.models_to_relax %>"
+model_preset="<%= context.model_preset %>" 
+run_relax="<%= context.run_relax %>"
+max_template_date=<%= context.max_template_date %>
+extra_parameters="<%= context.extra_parameters %>"
+sequence_1_input="<%= context.sequence_1 %>"
+sequence_2_input="<%= context.sequence_2 %>"
+sequence_3_input="<%= context.sequence_3 %>"
+sequence_4_input="<%= context.sequence_4 %>"
+sequence_5_input="<%= context.sequence_5 %>"
+sequence_6_input="<%= context.sequence_6 %>"
+sequence_7_input="<%= context.sequence_7 %>"
+sequence_8_input="<%= context.sequence_8 %>"
+sequence_9_input="<%= context.sequence_9 %>"
+sequence_10_input="<%= context.sequence_10 %>"
+num_multimer_predictions_per_model=<%= context.num_multimer_predictions_per_model %>
+
+if [[ <%= context.version %> == *"2.3.1"* ]]
+then
+    models_to_relax=""
+fi
+
+echo $models_to_relax
+seq_array=()
+for i in {1..10}
+do
+   id=sequence_$i
+   seq=$(eval "echo \$sequence_${i}_input")
+   if [[ -n "${seq//[[:blank:]]/}" ]]	
+   then
+	echo -e ">${id}\n${seq}" > ${id}.fasta
+   	seq_array+=("${id}.fasta")
+   fi
+done 
+
+
+# Test whether input is set
+if [[ -n "${input_fasta_paths//[[:blank:]]/}" ]]
+then
+        echo "The input is provided as a fasta file"
+        input="--fasta_paths=$input_fasta_paths"
+else
+        echo "The input sequences will be used"
+	seq=$(IFS=',' && echo "${seq_array[*]}")
+        input="--fasta_paths=$seq"
+fi
+
+
+if [ $use_precomputed_msas -eq 1 ]
+then
+        use_precomputed_msas="--use_precomputed_msas=true"
+else
+        use_precomputed_msas="--use_precomputed_msas=false"
+fi
+
+if [ $run_relax -eq 1 ]
+then
+        run_relax="--run_relax=true"
+else
+        run_relax="--run_relax=false"
+fi
+
+if [[ <%= context.version %> != *"2.3.1"* ]]; 
+then
+	run_relax=""; 
+fi
+
+module purge
+module load alphafold/<%= context.version %>
+module list 
+
+GPU_RELAX="false"
+if [[ $(nvidia-smi -L 2>/dev/null) ]]
+then
+        echo "BIOC: Enabling Nvidia GPU support in the container."
+        GPU_RELAX="true"
+fi
+
+if [[ $model_preset =~ .*"monomer".* ]]
+then
+	command="run_alphafold.sh --flagfile=${database_path}/${database}_monomer.ff  $input --max_template_date=$max_template_date --output_dir=$output_dir $model_preset --use_gpu_relax=$GPU_RELAX $use_precomputed_msas $run_relax $extra_parameters"
+else
+    command="run_alphafold.sh --flagfile=${database_path}/${database}_multimer.ff $input --max_template_date=$max_template_date  --output_dir=$output_dir $model_preset  --use_gpu_relax=$GPU_RELAX --num_multimer_predictions_per_model=$num_multimer_predictions_per_model  $use_precomputed_msas $run_relax $extra_parameters"
+fi
+
+nvidia-smi
+echo $command 
+
+eval $command 

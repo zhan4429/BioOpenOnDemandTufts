@@ -1,0 +1,255 @@
+---
+cluster: "tuftshpc"
+attributes:
+  modules: "alphafold"
+
+attributes:
+  bc_vnc_resolution:
+    required: true
+
+  num_cores:
+    widget: "select"
+    label: "Number of cores"
+    options:
+      - ["1", "1"]
+      - ["2", "2"]
+      - ["4", "4"]
+      - ["8", "8"]
+
+  num_memory:
+    widget: "select"
+    label: "Amount of memory"
+    options:
+      - ["16GB", "16000"]
+      - ["32GB", "32000"]
+      - ["64GB", "64000"]
+      - ["96GB", "96000"]       
+
+  gpu_partition:
+    widget: "select"
+    label: "Select preempt or normal gpu partition"
+    help: "NOTE: jobs submitted to the preempt partition may get automatically killed to allow higher priority jobs to run"
+    options:
+      - ["preempt"]
+      - ["gpu"]
+    value: "preempt"
+
+  gpu_type:
+    widget: "select"
+    label: "Select the GPU type"
+    help: "gpu partition only has a100 and p100, preempt partition has all listed gpu types."
+    options:
+      - ["a100"]
+      - ["p100"]
+      - ["v100"]
+      - ["rtx_a6000"]
+      - ["rtx_6000ada"]
+    value: "a100"
+
+<%= File.read("/etc/ood/config/apps/dashboard/batch_connect/partials/reservation.yml").indent(2) %>
+
+  version:
+    label: Software Version
+    widget: select
+    options:
+           - ["2.3.1"]
+           - ["2.3.2"]
+
+  database:
+    label: Database
+    widget: select
+    options:
+      - ["20231031", "full_db_20231031"]
+
+  fasta_paths:
+    widget: text_field
+    required: false
+    label: fasta_paths
+    help: | 
+           The fasta files containing amino acid sequence(s) to fold. If there are more multiple files, please separate them using comma(e.g. seq1.fasta,seq2.fasta) 
+
+  sequence_1:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_1
+    help: |
+        Enter the 1st amino acid sequence(s) to fold:
+
+  sequence_2:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_2
+    help: |
+        Enter the 2nd amino acid sequence(s) to fold:
+
+  sequence_3:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_3
+    help: |
+        Enter the 3rd amino acid sequence(s) to fold:
+
+  sequence_4:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_4
+    help: |
+        Enter the 4th amino acid sequence(s) to fold:
+
+
+  sequence_5:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_5
+    help: |
+        Enter the 5th amino acid sequence(s) to fold:
+
+  sequence_6:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_6
+    help: |
+        Enter the 6th amino acid sequence(s) to fold:
+
+  sequence_7:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_7
+    help: |
+            Enter the 7th amino acid sequence(s) to fold:
+
+  sequence_8:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_8
+    help: |
+            Enter the 8th amino acid sequence(s) to fold:
+
+  sequence_9:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_9
+    help: |
+            Enter the 9th amino acid sequence(s) to fold:
+
+  sequence_10:
+    widget: text_field
+    required: false
+    value: " "
+    label: Amino acid sequence_10
+    help: |
+            Enter the 10th amino acid sequence(s) to fold:
+
+  work_dir:
+    label: "Working Directory"
+    data-filepicker: true
+    data-target-file-type: dirs  # Valid values are: files, dirs, or both
+    readonly: false
+    help: "Select your project directory; defaults to $HOME"
+                  
+  output_dir:
+    widget: "text_field"
+    required: true
+    label: "Output directory Name"
+    help: "Where the results will be going to (relative to the working directory field above). Example: alphafold.out" 
+
+  model_preset:
+    widget: select
+    label: "model_preset"
+    options:
+      - [ 
+         "monomer",  "--model_preset=monomer",
+         data-hide-num-multimer-predictions-per-model: true
+        ]
+      - [ "multimer",  "--model_preset=multimer" ]
+    help: |
+           Select to run the monomer or multimer model for sequences. 
+
+  models_to_relax:
+    widget: select
+    label: "models_to_relax"
+    options:
+      - [ "best",  "--models_to_relax=best" ]
+      - [ "all",   "--models_to_relax=all" ]
+      - [ "none",   "--models_to_relax=none" ]
+    help: |
+           After generating the predicted model, AlphaFold runs a relaxation step to improve local geometry. By default, only the best model (by pLDDT) is relaxed (--models_to_relax=best), but also all of the models (--models_to_relax=all) or none of the models (--models_to_relax=none) can be relaxed.
+
+  run_relax:
+    label: run_relax
+    widget: check_box
+    checked_value: 1
+    unchecked_value: 0
+    help: |
+           Note: this is only required for v.2.3.1. You can ignore this for v.2.3.2 and later versions. 
+           Whether to run the final relaxation step on the predicted models. Turning relax off might result in predictions with
+           distracting stereochemical violations but might help in case you are having issues with the relaxation stage.
+
+  use_precomputed_msas:
+    label: use_precomputed_msas
+    widget: check_box
+    checked_value: 1
+    unchecked_value: 0
+    help: |
+           AlphaFold can re-use MSAs (multiple sequence alignments) for the same sequence; this can be useful for trying different AlphaFold parameters. This option assumes that the directory structure generated by the first AlphaFold run in the output directory exists and that the protein sequence is the same.
+
+  max_template_date:
+    label: max_template_date
+    widget: text_field
+    value: "2020-01-01"
+    help: |
+           Maximum template release date to consider (ISO-8601 format: YYYY-MM-DD).Important if folding historical test sets.
+         
+  num_multimer_predictions_per_model:
+    label: num_multimer_predictions_per_model
+    widget: number_field
+    max: 100
+    min: 1
+    value: 5
+    help: |
+           How many predictions (each with a different random seed) will be generated per model. E.g. if this is 2 and there are 5 models then there will be 10 predictions per input. Note: this FLAG only applies if model_preset=multimer. (default: 5).
+
+  extra_parameters:
+    widget: text_field
+    required: false
+    label: Extra parameters
+    help: |
+           Extra parameters to use. Multiple space-separated parameters can be used.
+
+form:
+  - bc_num_hours
+  - num_cores
+  - num_memory
+  - gpu_partition
+  - gpu_type 
+  - version
+  - database
+  - work_dir
+  - output_dir
+  - fasta_paths
+  - sequence_1
+  - sequence_2
+  - sequence_3
+  - sequence_4
+  - sequence_5
+  - sequence_6
+  - sequence_7
+  - sequence_8
+  - sequence_9
+  - sequence_10
+  - model_preset
+  - models_to_relax
+  - run_relax
+  - use_precomputed_msas
+  - num_multimer_predictions_per_model
+  - max_template_date
+  - extra_parameters

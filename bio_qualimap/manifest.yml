@@ -1,0 +1,7 @@
+---
+name: QualiMap
+category: Bioinformatics Apps
+subcategory: Apps
+role: batch_connect
+description: |
+ This app will launch QualiMap on the [Tufts High Performance Compute (HPC) cluster](https://it.tufts.edu/researchtechnology.tufts.edu). Resources are sized for most purposes. Email email tts-research@tufts.edu if larger capacity is needed.

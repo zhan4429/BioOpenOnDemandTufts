@@ -1,0 +1,5 @@
+# sgd - 11/01/2018
+set -x
+
+# Export the module function if it exists
+[[ $(type -t module) == "function" ]] && export -f module

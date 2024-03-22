@@ -1,0 +1,7 @@
+---
+name: RStudio for bioinformatics
+category: Bioinformatics Apps
+subcategory: Apps
+role: batch_connect
+description: |
+  This app will launch a RStudio server  with commonly used R packages for bioinformatics analysis. If you need to run scRNA-Seq analysis, please use another app Rstudio for scRNA-Seq under Bioinformatics Apps.
